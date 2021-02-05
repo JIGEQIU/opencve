@@ -1,26 +1,24 @@
 from flask import current_app as app
-from flask import redirect, render_template, request, url_for
+from flask import abort
 from flask_paginate import Pagination
 
-from opencve.controllers.main import main
 from opencve.models.products import Product
 from opencve.models.vendors import Vendor
 
 
-@main.route("/vendors/<vendor>/products")
-def products(vendor):
+def get_products(vendor, args):
     vendor = Vendor.query.filter_by(name=vendor).first()
     if not vendor:
-        return redirect(url_for("main.vendors"))
+        abort(404)
 
     q = Product.query.filter_by(vendor=vendor)
 
     # Search by term
-    if request.args.get("search"):
-        search = request.args.get("search").lower().replace("%", "").replace("_", "")
+    if args.get("search"):
+        search = args.get("search").lower().replace("%", "").replace("_", "")
         q = q.filter(Product.name.like("%{}%".format(search)))
 
-    page = request.args.get("page", type=int, default=1)
+    page = args.get("page", type=int, default=1)
     objects = q.order_by(Product.name.asc()).paginate(
         page, app.config["PRODUCTS_PER_PAGE"], True
     )
@@ -32,6 +30,4 @@ def products(vendor):
         css_framework="bootstrap3",
     )
 
-    return render_template(
-        "products.html", products=objects, vendor=vendor, pagination=pagination
-    )
+    return objects, vendor, pagination

@@ -22,8 +22,8 @@
                 </div>
                 <div class="box-body table-responsive no-padding">
                     <table class="table table-hover table-striped">
-                        {% if cwes.total %}
-                        {% for cwe in cwes.items %}
+                        {% if cwes %}
+                        {% for cwe in cwes %}
                         <tr>
                             <td>{{ cwe.cwe_id }}</td>
                             <td>{{ cwe.name|default('No name', true) }}</td>

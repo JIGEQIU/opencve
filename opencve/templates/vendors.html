@@ -33,7 +33,7 @@
                             <th class="text-center">Products</th>
                             <th class="text-center">Actions</th>
                         </tr>
-                        {% for vendor in vendors.items %}
+                        {% for vendor in vendors %}
                         <tr>
                             <td>{{ vendor.name | humanize }}</td>
                             <td class="text-center"><a href="{{ url_for('.products', vendor=vendor.name) }}">{{
@@ -98,8 +98,8 @@
                 <div class="box-body">
                     <div class="btn-group">
                         {% for letter in letters %}
-                        <a class="btn btn-very-sm {% if request.args.get('l') != letter %}btn-default{% else %}btn-primary{% endif %}"
-                           href="{{ url_for('.vendors', l=letter) }}" type="button">{{ letter|upper }}</a>
+                        <a class="btn btn-very-sm {% if request.args.get('letter') != letter %}btn-default{% else %}btn-primary{% endif %}"
+                           href="{{ url_for('.vendors', letter=letter) }}" type="button">{{ letter|upper }}</a>
                         {% endfor %}
                     </div>
                 </div>
